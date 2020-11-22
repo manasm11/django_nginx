@@ -13,4 +13,10 @@
 2. You can check user added and shell in file: `/etc/passwd`.
 To check group, type `groups manas` in terminal.
 3. Login into new user created.
-You may want to change hostname (hostname@username:cwd_path> )
+You may want to change hostname (username@hostname:cwd_path> )
+    1. Using `sudo hostnamectl set-hostname newhostname` 
+    OR
+    2. Changing text in file `/etc/hostname`
+
+## Setup SSH Keys
+1. 
