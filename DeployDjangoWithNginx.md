@@ -53,3 +53,52 @@ You may want to change hostname (username@hostname:cwd_path> )
 >After that you may login by 
 `ssh [remote-user]@[domain]`
 
+# Nginx
+>Virtual Servers: A web server can host multiple websites (called virtual servers). In layman terms, it is sites inside sites-available directory.
+## Setup Nginx
+1. `sudo apt install nginx`
+2. `sudo systemctl status nginx` to check if nginx is running.
+
+## Configure bare-minimum website
+1. ```bash
+    cd /etc/nginx/sites-available
+    ```
+2. ```bash
+    #To remove the default website of nginx.
+    sudo rm default 
+    ```
+3. ```bash
+    #It is a good practice to name the
+    #configuration file sam eas domain.
+    sudo touch [website-domain]
+    ```
+4. Add the bare minimum config details to the [website-domain] file:
+    ```nginx
+    server{
+        listen 80;
+        server_name [website-domain];
+
+        location / {
+            root [path-to-website-directory];
+        }
+    }
+    ```
+>add another location to server static files:
+>This in essence replaces /static url at start with the alias, ie [website-domain]/static/test.js will give file [website-domain]/[path-to-static-directory]/test.js
+```nginx
+    location /static/ {
+        alias [path-to-static-directory];
+    }
+```
+>To use nginx as proxy, 
+```nginx
+    location / {
+        proxy_pass http://localhost:[port-for-actual-server];
+    }
+```
+ 
+5. Create a symbolic link to the [website-domain] file, in sites-enabled directory.
+   ```bash
+    sudo ln -s /etc/nginx/sites-available/[website-domain] /etc/nginx/sites-enabled/[website-domain]
+   ```
+
