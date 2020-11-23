@@ -212,3 +212,38 @@ To view TLS Certificate of a website, click on the lock -> connection is secure 
    sudo certbot certonly --nginx
    sudo certbot install --nginx
    ```
+
+# Gunicorn
+## What is gunicorn
+- Gunicorn is a wsgi server that interacts with django/flask webapp.
+>WSGI: Web Server Gateway Interface.
+- It can create multiple workers and serve multiple requests simultaneously.
+- It is fast.
+- It cannot serve static files.
+  - Hence we use web servers like nginx.
+
+## Installing Gunicorn
+1. Create and activate virtualenv.
+2. ```bash
+   pip install gunicorn
+   ```
+## Configuring Project
+In `[project-directory]/settings.py`
+1. `ALLOWED_HOSTS = ['[remote-ip]']`
+2. `DEBUG = False`
+3. `STATIC_URL = '[complete-path-to-static-directory]'`❓Maybe this is not needed if nginx configuration has alias for /static/
+
+## Configuring Gunicorn
+1. Create conf directory and a gunicorn_conf.py file
+```python
+command = '[path-to-gunicorn-executable]'
+pythonpath = '[path-to-project]'
+bind = '[remote-ip]:[port/8000]'
+workers = [number-of-workers/3]
+```
+
+## Starting Gunicorn
+1. ```bash
+   gunicorn -c conf/gunicorn_conf.py [project-name].wsgi
+   ```
+2. To run this in background, `ctrl+z`, then `bg`
