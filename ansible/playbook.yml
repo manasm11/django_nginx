@@ -1,0 +1,7 @@
+- hosts: dj_deploy
+  gather_facts: no
+  become: True
+  roles:
+    - role: 'roles/update_laozi'
+      vars:
+        gunicorn_port: 9001

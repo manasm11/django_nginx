@@ -168,4 +168,27 @@ Main ansible directory has:
           state: restarted
           name: nginx
       ```
+>for simple test, you can try:
+`main.yml`
+```yaml
+- name: Create a file testing213
+  file:
+    state: touch
+    path: testing213
+```
 >YAML files are very sensitive to spaces.
+##### File structure of ansible directory
+```
+.
+├── hosts
+├── playbook.yml
+└── roles
+    └── update_laozi
+        ├── tasks
+        │   └── main.yml
+        └── templates
+            └── laozi.in
+```
+## Executing
+- ansible-playbook playbook.yml -i hosts -K
+>-K to ask for sudo password
