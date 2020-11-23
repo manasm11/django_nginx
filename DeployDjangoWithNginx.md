@@ -192,3 +192,23 @@ Main ansible directory has:
 ## Executing
 - ansible-playbook playbook.yml -i hosts -K
 >-K to ask for sudo password
+
+# Adding HTTPS Certificate
+## What is TLS Certificate
+TLS Certificate is same as HTTPS.
+It contains:
+1. Public key
+2. Details of organization, date of renew etc.
+
+To view TLS Certificate of a website, click on the lock -> connection is secure -> view certificates.
+
+## Adding certificate
+1. Installing Certbot
+   ```bash
+   sudo apt install certbot python3-certbot-nginx
+   ```
+2. Adding Certificate
+   ```bash
+   sudo certbot certonly --nginx
+   sudo certbot install --nginx
+   ```
