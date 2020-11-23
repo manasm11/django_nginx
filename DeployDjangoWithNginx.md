@@ -169,7 +169,3 @@ Main ansible directory has:
           name: nginx
       ```
 >YAML files are very sensitive to spaces.
-
-
-1. A directory with automation steps.
-   1. 
