@@ -96,9 +96,80 @@ You may want to change hostname (username@hostname:cwd_path> )
         proxy_pass http://localhost:[port-for-actual-server];
     }
 ```
+>Using variable
+```nginx
+    location / {
+        proxy_pass http://localhost:{{[variable-name]};
+    }
+```
  
 5. Create a symbolic link to the [website-domain] file, in sites-enabled directory.
    ```bash
     sudo ln -s /etc/nginx/sites-available/[website-domain] /etc/nginx/sites-enabled/[website-domain]
    ```
 
+# Ansible
+>Ansible is used to automate server management stuff.
+## Installing
+1. Preferably create a virtualenv.
+2. pip install ansible
+
+## Directory Structure
+Main ansible directory has:
+1. `hosts` file that contain remote hosts ip or preferably the **shortcuts**.
+   The file just contains the shortcut we set earlier.
+   ```
+    shortcut
+   ```
+>hosts file is called inventory (look at documentations for details).
+2. A playbook file. `[something].yml`
+   ```yaml
+   - hosts: [shortcut]
+     gather_facts: no
+     become: True
+     roles:
+       - role: '[path-to-role-directory]'
+         vars:
+           gunicorn_port: 9001
+           [other-variables]: [values]
+   ```
+   >**gather_facts**: stop ansible to gather details to speed-up the process.
+   >**[role-directory]**: contains two sub-directories:
+   ```
+   [role-directory]
+   +-- tasks
+   |    +-- main.yml
+   +-- templates
+        +-- [file-to-be-saved-to-'sites-available']
+   ```
+   >**become**: to allow ansible to execute sudo commands. (become superuser)
+   1. `main.yml`
+      ```yaml
+      ---
+      - name: Install nginx
+        apt:
+          name: nginx
+          state: present
+      - name: Deactivate the default nginx from sites-enabled
+        file:
+          path: [path-to-'sites-enabled']/default
+          state: absent
+      - name: Copy config file to sites-available
+        template:
+          src: [file-in-templates-directory]
+          dest: [path-to-'sites-available']
+      - name: Create link to sites-enabled
+        file:
+          src: [path-to-'sites-available']/[config-file]
+          dest: [path-to-'sites-enabled']/[config-file]
+          state: link
+      - name: Restart nginx
+        systemd:
+          state: restarted
+          name: nginx
+      ```
+>YAML files are very sensitive to spaces.
+
+
+1. A directory with automation steps.
+   1. 
